@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import Card from "./components/Card/Card";
+import Animals from "./components/Animals/Animals";
+import { AddFormAnimals } from "./components/AddFormAnimals/AddFormAnimals";
 
 const getRandomKey = () =>
   Math.floor((1 + Math.random()) * 0x10000)
@@ -11,7 +12,7 @@ function App() {
   const [animals, setAnimals] = useState([
     {
       id: getRandomKey(),
-      name: "Smoky",
+      nameAnimal: "Smoky",
       age: 8,
       type: "cat",
       img: "https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -19,81 +20,43 @@ function App() {
 
     {
       id: getRandomKey(),
-      name: "Baksi",
+      nameAnimal: "Baksi",
       age: 4,
       type: "dog",
       img: "https://images.pexels.com/photos/18745826/pexels-photo-18745826/free-photo-of-small-white-dog-in-a-camo-vest-sitting-in-front-of-a-bowl-on-the-grass.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
   ]);
 
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [type, setType] = useState("");
-  const [url, setUrl] = useState("");
+  const [item, setItem] = useState({
+    id: getRandomKey(),
+    nameAnimal: "",
+    age: "",
+    type: "",
+    img: "",
+  });
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setItem((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setAnimals([item, ...animals]);
+  };
 
-    const obj = {
-      id: getRandomKey(),
-      name, // это значение стейта
-      age,
-      type,
-      img: url,
-    }
-
-    const copyAnimals = [...animals];
-    copyAnimals.push(obj)
+  const deleteCard = (id) => {
+    const copyAnimals = animals.filter((animal) => animal.id !== id);
     setAnimals(copyAnimals);
-    
-  }
-
-
+  };
 
   return (
     <div className="App">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Age"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="URL PIC"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+      <AddFormAnimals handleSubmit={handleSubmit} handleInput={handleInput} />
 
-        <button className="btn-add">Add</button>
-      </form>
-
-      <div className="animals">
-        {animals.map((animal) => {
-          return (
-            <Card
-              key={animal.id}
-              cardSrc={animal.img}
-              name={animal.name}
-              age={animal.age}
-              type={animal.type}
-            />
-          );
-        })}
-      </div>
+      <Animals animals={animals} deleteCard={deleteCard} />
     </div>
   );
 }
