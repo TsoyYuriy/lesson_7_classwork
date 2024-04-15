@@ -1,0 +1,14 @@
+
+.card {
+  padding: 50px;
+  display: inline-block;
+  border: 1px solid pink;
+  border-radius: 10px;
+}
+
+.card__img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+}
