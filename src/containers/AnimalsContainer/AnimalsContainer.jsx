@@ -2,6 +2,7 @@ import React from "react";
 import { AddFormAnimals } from "../../components/AddFormAnimals/AddFormAnimals";
 import Animals from "../../components/Animals/Animals";
 import { useState } from "react";
+import './animals-container.css'
 
 const getRandomKey = () =>
   Math.floor((1 + Math.random()) * 0x10000)
@@ -53,8 +54,19 @@ export const AnimalsContainer = () => {
     const copyAnimals = animals.filter((animal) => animal.id !== id);
     setAnimals(copyAnimals);
   };
+
+  const countClasses = ['green']
+
+  if (animals.length <= 1) {
+    countClasses.push('red')
+  }
+
+
   return (
     <div>
+
+      <p className={countClasses.join(' ')}>{animals.length}</p>
+
       <AddFormAnimals handleSubmit={handleSubmit} handleInput={handleInput} />
 
       <Animals animals={animals} deleteCard={deleteCard} />
